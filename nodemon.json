@@ -1,0 +1,9 @@
+{
+  "env": {
+    "HOST": "localhost",
+    "USER": "crmadmin",
+    "PASSWORD": "crmadmin",
+    "DB": "crm",
+    "JWT": "crmSecretKeyForJWT"
+  }
+}
