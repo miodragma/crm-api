@@ -19,7 +19,7 @@ router.put('/signup', [
               return Promise.reject('User already exists!')
             }
           })
-      }).normalizeEmail(),
+      }),
     body('password').trim().isLength({ min: 5 }),
     body('confirmPassword').custom((value, { req }) => {
       if (value !== req.body.password) {
@@ -29,7 +29,9 @@ router.put('/signup', [
       }
       return true
     }),
-    body('name').trim().isLength({ min: 5 })
+    body('firstName').trim().isLength({ min: 5 }),
+    body('lastName').trim().isLength({ min: 5 }),
+    isAuth
   ],
   authController.signup
 );

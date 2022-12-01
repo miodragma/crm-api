@@ -42,7 +42,7 @@ exports.signup = async (req, res, next) => {
       isAdmin: false
     }).save();
 
-    const newUser = { name: user.username, fullName: `${user.firstName} ${user.lastName}`, userId: user.id };
+    const newUser = { username: user.username, fullName: `${user.firstName} ${user.lastName}`, userId: user.id };
     res.status(201).json({ message: 'User created!', user: newUser })
 
   } catch (err) {
@@ -80,7 +80,13 @@ exports.login = async (req, res, next) => {
       },
       `${process.env.JWT}`,
       { expiresIn: '24h' });
-    const loggedUser = { name: user.username, fullName: `${user.firstName} ${user.lastName}`, userId: user.id, token };
+    const loggedUser = {
+      username: user.username,
+      fullName: `${user.firstName} ${user.lastName}`,
+      isAdmin: user.isAdmin,
+      userId: user.id,
+      token
+    };
     res.status(201).json({ user: loggedUser })
 
   } catch (err) {
@@ -110,7 +116,13 @@ exports.getUser = async (req, res, next) => {
       },
       `${process.env.JWT}`,
       { expiresIn: '24h' });
-    const loggedUser = { name: user.username, fullName: `${user.firstName} ${user.lastName}`, userId: user.id, token };
+    const loggedUser = {
+      username: user.username,
+      fullName: `${user.firstName} ${user.lastName}`,
+      isAdmin: user.isAdmin,
+      userId: user.id,
+      token
+    };
     res.status(201).json({ user: loggedUser })
 
   } catch (err) {
