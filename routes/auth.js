@@ -30,7 +30,8 @@ router.put('/signup', [
       return true
     }),
     body('firstName').trim().isLength({ min: 5 }),
-    body('lastName').trim().isLength({ min: 5 })
+    body('lastName').trim().isLength({ min: 5 }),
+    isAuth
   ],
   authController.signup
 );

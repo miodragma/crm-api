@@ -8,19 +8,19 @@ exports.signup = async (req, res, next) => {
 
   try {
 
-    // const userId = req.userId;
-    // const adminUser = await User.findByPk(userId)
-    // if (!adminUser) {
-    //   const error = new Error('A user with this email could not be found');
-    //   error.statusCode = 401;
-    //   throw error;
-    // }
-    //
-    // if (!adminUser.isAdmin) {
-    //   const error = new Error("You don't have permission to create user!");
-    //   error.statusCode = 403;
-    //   throw error;
-    // }
+    const userId = req.userId;
+    const adminUser = await User.findByPk(userId)
+    if (!adminUser) {
+      const error = new Error('A user with this email could not be found');
+      error.statusCode = 401;
+      throw error;
+    }
+
+    if (!adminUser.isAdmin) {
+      const error = new Error("You don't have permission to create user!");
+      error.statusCode = 403;
+      throw error;
+    }
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -39,7 +39,7 @@ exports.signup = async (req, res, next) => {
       email: '',
       password: hashedPassword,
       username,
-      isAdmin: true
+      isAdmin: false
     }).save();
 
     const newUser = { username: user.username, fullName: `${user.firstName} ${user.lastName}`, userId: user.id };
