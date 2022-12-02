@@ -39,7 +39,7 @@ exports.signup = async (req, res, next) => {
       email: '',
       password: hashedPassword,
       username,
-      isAdmin: false
+      isAdmin: true
     }).save();
 
     const newUser = { username: user.username, fullName: `${user.firstName} ${user.lastName}`, userId: user.id };
