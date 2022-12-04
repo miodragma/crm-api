@@ -29,6 +29,14 @@ const Customer = sequelize.define('customer', {
     type: Sequelize.STRING,
     allowNull: true
   },
+  isPaid: {
+    type: Sequelize.BOOLEAN,
+    allowNull: true
+  },
+  city: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
   notes: {
     type: Sequelize.ARRAY(Sequelize.JSON),
     allowNull: true

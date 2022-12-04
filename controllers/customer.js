@@ -1,6 +1,8 @@
+const { Op } = require('sequelize');
+
 const User = require('../models/user');
 const Customer = require('../models/customer');
-const { Op } = require('sequelize');
+const City = require('../models/city');
 
 
 exports.create = async (req, res, next) => {
@@ -15,7 +17,7 @@ exports.create = async (req, res, next) => {
       throw error;
     }
 
-    const { firstName, lastName, telephone, email, remindOn, notes } = req.body;
+    const { firstName, lastName, telephone, email, remindOn, notes, isPaid, city } = req.body;
 
     if (!!telephone) {
       const currCustomer = await Customer.findOne({ where: { telephone } })
@@ -32,7 +34,9 @@ exports.create = async (req, res, next) => {
       telephone,
       email,
       remindOn,
-      notes
+      isPaid,
+      city,
+      notes,
     }).save();
 
     res.status(201).json({ message: 'Customer created!', customer })
@@ -68,9 +72,17 @@ exports.getCustomers = async (req, res, next) => {
             }
           }
         } else {
-          where[key] = {
-            [Op.iLike]: `%${params[key]}%`
+          if (key !== 'isPaid') {
+            where[key] = {
+              [Op.iLike]: `%${params[key]}%`
+            }
           }
+        }
+      }
+      if (key === 'isPaid' && params[key] !== 'all') {
+        const isPaid = 'true' === params['isPaid'];
+        where['isPaid'] = {
+          [Op.eq]: isPaid
         }
       }
     }
@@ -114,7 +126,7 @@ exports.edit = async (req, res, next) => {
       throw error;
     }
 
-    const { firstName, lastName, telephone, email, remindOn, notes, id } = req.body;
+    const { firstName, lastName, telephone, email, remindOn, isPaid, city, notes, id } = req.body;
 
     const customer = await Customer.findByPk(id);
 
@@ -127,12 +139,25 @@ exports.edit = async (req, res, next) => {
       }
     }
 
+    if (!!city) {
+      const currCity = await City.findOne({ where: { value: city } });
+      if (!currCity) {
+        const error = new Error(`Uh oh! City "${city}" is not exist.`);
+        error.statusCode = 422;
+        throw error;
+      }
+    }
+
+    const filterNotes = notes.filter(note => !!note.value);
+
     customer.firstName = firstName;
     customer.lastName = lastName;
     customer.telephone = telephone;
     customer.email = email;
     customer.remindOn = remindOn;
-    customer.notes = notes;
+    customer.isPaid = isPaid;
+    customer.city = city;
+    customer.notes = filterNotes;
 
     await customer.save();
 

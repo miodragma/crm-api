@@ -10,6 +10,7 @@ const errorMiddleware = require('./middleware/error');
 /* Routes */
 const authRoutes = require('./routes/auth');
 const customerRoutes = require('./routes/customer');
+const cityRoutes = require('./routes/city');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 
 app.use('/auth', authRoutes);
 app.use('/customer', customerRoutes);
+app.use('/city', cityRoutes);
 
 app.use(errorMiddleware);
 
