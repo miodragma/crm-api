@@ -30,7 +30,7 @@ app.use('/city', cityRoutes);
 
 app.use(errorMiddleware);
 
-sequelize.sync()
+sequelize.sync({ force: true })
   .then(result => {
     const PORT = process.env.PORT || 8080;
     app.listen(PORT, () => {
